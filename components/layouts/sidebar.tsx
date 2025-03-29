@@ -112,6 +112,19 @@ const Sidebar = () => {
                                     </button>
                                 </li>
 
+                                
+                                <li className="menu nav-item ">
+
+                                    <button type="button" className={`${activePath.includes('/allblogs') ? 'bg-[#ceddda]' : ''} group w-full`} onClick={() => toggleMenu('allblogs')}>
+                                        <div className="flex items-center gap-3">  
+                                            <span className="text-black  dark:text-[#506690] dark:group-hover:text-white-dark">All Blogs</span>
+                                        </div>
+
+
+
+                                    </button>
+                                </li>
+
                                 <li className="menu nav-item ">
 
                                     <button type="button" className={`${activePath.includes('/subscriptions') ? 'bg-[#ceddda]' : ''} group w-full`} onClick={handleLogout}>

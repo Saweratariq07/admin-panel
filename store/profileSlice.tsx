@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    
-   first_name:'',
+    data: {
+        first_name:'',
    last_name:'',
    email:'',
    is_active:'',
@@ -11,6 +11,8 @@ const initialState = {
    role:'',
    profile_image_url:'',
    id:''
+    }
+   
 }
 
 const profileSlice = createSlice({
