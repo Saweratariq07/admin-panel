@@ -10,13 +10,36 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "./editor.css"
 import { showMessage } from "@/utils/notify/Alert";
 import ClockLoader from "../common/ClockLoader";
+import { CustomSelect } from "./CustomSelect";
 
 export const CreateBlogs = () => {
     const [value, setValue] = useState("");
     const [preview, setPreview] = useState(null)
     const [title, setTitle] = useState("");
     const [image, setImage] = useState<any>(null);
+    const [category, setCategory] = useState<any>({ value: "web-development", label: "Web Development" })
     const [loading, setLoading] = useState(false)
+
+    const blogCategories = [
+        { value: "web-development", label: "Web Development" },
+        { value: "mobile-development", label: "Mobile Development" },
+        { value: "ai-ml", label: "AI & Machine Learning" },
+        { value: "cybersecurity", label: "Cybersecurity" },
+        { value: "cloud-computing", label: "Cloud Computing" },
+        { value: "data-science", label: "Data Science" },
+        { value: "programming", label: "Programming" },
+        { value: "tech-news", label: "Tech News" },
+        { value: "software-engineering", label: "Software Engineering" },
+        { value: "gadgets", label: "Gadgets & Reviews" },
+        { value: "gaming", label: "Gaming" },
+        { value: "productivity", label: "Productivity & Tools" },
+        { value: "entrepreneurship", label: "Entrepreneurship" },
+        { value: "marketing", label: "Digital Marketing" },
+        { value: "self-improvement", label: "Self-Improvement" },
+        { value: "finance", label: "Finance & Investing" },
+        { value: "lifestyle", label: "Lifestyle & Wellness" }
+    ];
+
 
     const handleImageUpload = (e: any) => {
         const file = e.target.files[0];
@@ -28,7 +51,7 @@ export const CreateBlogs = () => {
     };
 
     const handleCreate = async () => {
-        if (!title || !value || !image) {
+        if (!title || !value || !image || !category) {
             showMessage("Please fill all fields and select an image.", "error");
             return;
         }
@@ -46,12 +69,12 @@ export const CreateBlogs = () => {
             const response = await axios.post(CLOUDINARY_URL, formData);
             let imageURL = response.data.secure_url
 
-            console.log(imageURL)
 
             await addDoc(collection(db, "blogs"), {
                 title,
                 image: imageURL,
                 value,
+                category: category?.value || "",
                 createdAt: new Date(),
             });
 
@@ -61,6 +84,7 @@ export const CreateBlogs = () => {
             setPreview(null);
             setValue("");
             setImage(null)
+            setCategory({ value: "web-development", label: "Web Development" })
             setLoading(false)
         } catch (error) {
             console.error("Error creating blog:", error);
@@ -98,6 +122,14 @@ export const CreateBlogs = () => {
                 />
             </div>
         )}
+
+        <div className="my-2">
+            <div>
+                <CustomSelect options={blogCategories} value={category} OnSelect={setCategory} label="Category" placeholder="Select category" />
+            </div>
+        </div>
+
+
 
         <div className="flex justify-end items-center mb-4">
             <button
