@@ -22,13 +22,13 @@ export const BlogPage = () => {
     const [loading, setLoading] = useState(true);
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [selectedBlog, setSelectedBlog] = useState<any>(null)
-
-
     const [value, setValue] = useState("");
     const [preview, setPreview] = useState(null)
     const [title, setTitle] = useState("");
     const [image, setImage] = useState<any>(null);
     const [category, setCategory] = useState<any>({ value: "web-development", label: "Web Development" })
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [blogToDelete, setBlogToDelete] = useState<any>(null);
 
 
     const blogCategories = [
@@ -196,9 +196,12 @@ export const BlogPage = () => {
                             {/* Delete Button */}
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => handleDelete(blog.id)}
+                                    onClick={() => {
+                                        setIsDeleteModalOpen(true);
+                                        setBlogToDelete(blog);
+                                    }}
                                     className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md"
-                                >
+                                    >
                                     Delete
                                 </button>
 
@@ -285,8 +288,36 @@ export const BlogPage = () => {
 
                 </div>
             )}
-        </div>
+            {isDeleteModalOpen && (
+                <div className="fixed inset-0 bg-black/40 z-[9999] flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+                    <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this blog?</h3>
+                    <p className="text-gray-600 mb-6">{blogToDelete?.title}</p>
 
-
+                    <div className="flex justify-center gap-4">
+                        <button
+                        onClick={async () => {
+                            setIsDeleteModalOpen(false);
+                            await handleDelete(blogToDelete?.id);
+                            setBlogToDelete(null);
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors"
+                        >
+                        Yes, Delete
+                        </button>
+                        <button
+                        onClick={() => {
+                            setIsDeleteModalOpen(false);
+                            setBlogToDelete(null);
+                        }}
+                        className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded-md transition-colors"
+                        >
+                        Cancel
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                )}
+        </div>        
     </>
 }
